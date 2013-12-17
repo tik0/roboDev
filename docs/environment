@@ -1,0 +1,7 @@
+Installiere:
+Ubuntu
+gcc
+cmake
+Eclipse Kepler SR1
+	CMakeEd - Editor für CMake Skripte (http://www.cthing.com/CMakeEd.asp)
+	Subversive - Subversion für Eclipse
