@@ -13,7 +13,8 @@ find_package(PkgConfig)
 pkg_check_modules(RSB rsb)
 pkg_check_modules(OPENCV opencv)
 pkg_check_modules(LIBV4l2 libv4l2)
- 
+
+# Not needed. The libraries will be set manualy
 # link_directories(
 #     ${RSB_LIBRARY_DIRS}
 #     ${OPENCV_LIBRARY_DIRS}
@@ -22,27 +23,22 @@ pkg_check_modules(LIBV4l2 libv4l2)
 
 # Set the include pathe
 include_directories(
-    ${RSB_INCLUDE_DIRS}
-    ${OPENCV_INCLUDE_DIRS}
-    ${LIBV4l2_INCLUDE_DIRS}
-    "../../includes"                                      # Other includes like converters and stuff
-    "${CMAKE_CURRENT_BINARY_DIR}"                         # add the binary tree to the search path for include files
-    "$ENV{SDKTARGETSYSROOT}/usr/include/c++"
-    "$ENV{SDKTARGETSYSROOT}/usr/include"
-    "$ENV{SDKTARGETSYSROOT}/usr/include/c++/arm-poky-linux-gnueabi"
+    ${RSB_INCLUDE_DIRS}                                             # RSB
+    ${OPENCV_INCLUDE_DIRS}                                          # OpenCV
+    ${LIBV4l2_INCLUDE_DIRS}                                         # Video for Linux
+    "../../includes"                                                # Other includes like converters and stuff
+    "${CMAKE_CURRENT_BINARY_DIR}"                                   # add the binary tree to the search path for include files
+    "$ENV{SDKTARGETSYSROOT}/usr/include"                            # System includes
+    "$ENV{SDKTARGETSYSROOT}/usr/include/c++"                        # System c++ includes
+    "$ENV{SDKTARGETSYSROOT}/usr/include/c++/arm-poky-linux-gnueabi" # IO streams
 )
 
 # add the executable
 add_executable ("${PROJECT_NAME}" main.cxx infraRed.cpp rsbInformer.cpp)
 
-get_cmake_property(_variableNames VARIABLES)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
 # Set the compiler
-SET (CMAKE_CXX_COMPILER ${CXX})
-SET (CMAKE_C_COMPILER ${CPP})
+SET (CMAKE_C_COMPILER $ENV{CPP})
+SET (CMAKE_CXX_COMPILER $ENV{CXX})
 
 # Link the executable to the library. 
 # SET (BLAH "$ENV{SDKTARGETSYSROOT}/usr/lib")
