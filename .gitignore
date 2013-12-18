@@ -23,3 +23,5 @@
 # CMake files
 CMakeCache.txt
 *.cmake
+CMakeFiles
+Makefile
