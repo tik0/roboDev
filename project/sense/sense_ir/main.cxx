@@ -1,11 +1,3 @@
-//#include <c++/iostream>
-#include <c++/iostream>
-
-void main(void){
-	std::cout << "test";
-}
-
-/*
 //============================================================================
 // Name        : sense_ir.cpp
 // Author      : 
@@ -57,6 +49,3 @@ int main (int argc, const char **argv){
 
 	return EXIT_SUCCESS;
 }
-
-
-*/
