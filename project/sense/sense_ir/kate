@@ -1,7 +1,0 @@
--- Set PROJECT_NAME to sense_ir
--- Could not determine Eclipse version, assuming at least 3.6 (Helios). Adjust CMAKE_ECLIPSE_VERSION if this is wrong.
--- lalalallala include dir /opt/poky/1.5+snapshot_neon/sysroots/cortexa8hf-vfp-neon-poky-linux-gnueabi/usr/include
--- lalalallala include dir /opt/poky/1.5+snapshot_neon/sysroots/cortexa8hf-vfp-neon-poky-linux-gnueabi/usr/include
--- Configuring done
--- Generating done
--- Build files have been written to: /home/tiko/_dev_cmake_bebot/roboDev/project/sense/sense_ir
