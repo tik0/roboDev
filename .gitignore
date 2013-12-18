@@ -15,6 +15,11 @@
 # Eclipse Project files
 .project
 .cproject
+.settings
 
 # Shadow Files
 *~
+
+# CMake files
+CMakeCache.txt
+*.cmake
