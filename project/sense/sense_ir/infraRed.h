@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include <bebot.h>
-#include <c++/vector>
+#include <vector>
 
 #include "rsbInformer.h"
 #include "../Constants.h"
