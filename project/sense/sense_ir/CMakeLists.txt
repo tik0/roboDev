@@ -37,8 +37,8 @@ include_directories(
 add_executable ("${PROJECT_NAME}" main.cxx infraRed.cpp rsbInformer.cpp)
 
 # Set the compiler
-SET (CMAKE_C_COMPILER $ENV{CPP})
-SET (CMAKE_CXX_COMPILER $ENV{CXX})
+# SET (CMAKE_C_COMPILER $ENV{CPP})
+# SET (CMAKE_CXX_COMPILER $ENV{CXX})
 
 # Link the executable to the library. 
 # SET (BLAH "$ENV{SDKTARGETSYSROOT}/usr/lib")
