@@ -1,72 +1,94 @@
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+#include <getopt.h>
+using namespace std;
 
-class readFlags {
-public:
-	readFlags(int p_iArgc, char **p_ppcArgv);
-	~readFlags();
-	
-	
-};
+std::vector<std::string> g_sLScope;
+std::vector<std::string> g_sIScope;
+std::vector<std::string> g_sRScope;
+std::vector<size_t> g_uiFreq;
 
-int readFlags(int argc, char **argv)
+//extern char * __progname;
+
+int readFlags(int argc, char **argv, size_t numFreq, size_t numList, size_t numInfo, size_t numRem)
 {
-	extern char *optarg;
-	extern int optind;
-	int c, err = 0; 
-	int mflag=0, pflag=0, fflag=0;
-	char *sname = "default_sname", *fname;
-	static char usage[] = "usage: %s  -f frequency [-s sname] name [name ...]\n";
+        extern char *optarg;
+        extern int optind;
+        int c, err = 0;
+        size_t numFlags = numFreq + numList + numInfo + numRem;
+        size_t fflag=0, lflag=0, iflag=0, rflag=0, hflag=0, eflag=0;
+        char *sname = "default_sname", *fname;
 
-	while ((c = getopt(argc, argv, "df:mps:")) != -1)
-		switch (c) {
-		case 'd':
-			debug = 1;
-			break;
-		case 'm':
-			mflag = 1;
-			break;
-		case 'p':
-			pflag = 1;
-			break;
-		case 'f':
-			fflag = 1;
-			fname = optarg;
-			break;
-		case 's':
-			sname = optarg;
-			break;
-		case '?':
-			err = 1;
-			break;
-		}
-	if (fflag == 0) {	/* -f was mandatory */
-		fprintf(stderr, "%s: missing -f option\n", argv[0]);
-		fprintf(stderr, usage, argv[0]);
-		exit(1);
-	} else if ((optind+1) > argc) {	
-		/* need at least one argument (change +1 to +2 for two, etc. as needeed) */
+        std::string usage("usage: %s  ");
+        for ( size_t idx = 0; idx < numFreq; idx++)  usage.append("-f frequency ");
+        for ( size_t idx = 0; idx < numList; idx++)  usage.append("-l listenerscope ");
+        for ( size_t idx = 0; idx < numInfo; idx++)  usage.append("-i informerscope ");
+        for ( size_t idx = 0; idx < numRem; idx++)   usage.append("-r remoteprocedurescope ");
+        usage.append("[-e] [-h] \n\t-h\tPrint this help\n\t-e\tExecute without any flags\n");
 
-		printf("optind = %d, argc=%d\n", optind, argc);
-		fprintf(stderr, "%s: missing name\n", argv[0]);
-		fprintf(stderr, usage, argv[0]);
-		exit(1);
-	} else if (err) {
-		fprintf(stderr, usage, argv[0]);
-		exit(1);
-	}
-	/* see what we have */
-	printf("debug = %d\n", debug);
-	printf("pflag = %d\n", pflag);
-	printf("mflag = %d\n", mflag);
-	printf("fname = \"%s\"\n", fname);
-	printf("sname = \"%s\"\n", sname);
-	
-	if (optind < argc)	/* these are the arguments after the command-line options */
-		for (; optind < argc; optind++)
-			printf("argument: \"%s\"\n", argv[optind]);
-	else {
-		printf("no arguments left to process\n");
-	}
-	exit(0);
+        while ((c = getopt(argc, argv, "f:l:i:r:hn")) != -1)
+                switch (c) {
+                case 'f':
+                        fflag++;
+                        g_uiFreq.push_back(atoi(optarg));
+                        break;
+                case 'l':
+                        lflag++;
+                        g_sLScope.push_back(optarg);
+                        break;
+                case 'i':
+                        iflag++;
+                        g_sIScope.push_back(optarg);
+                        break;
+                case 'r':
+                        rflag++;
+                        g_sRScope.push_back(optarg);
+                        break;
+                case 'h':
+                        hflag = 1;
+                        break;
+                case 'e':
+                        eflag = 1;
+                        sname = optarg;
+                        break;
+                case '?':
+                        err = 1;
+                        break;
+                }
+        if (hflag == 1 || argc <= (1 + numFlags)) {
+                fprintf(stderr, "%s: missing -f option\n", argv[0]);
+                fprintf(stderr, usage.c_str(), argv[0]);
+                exit(1);
+        } else if ((optind+1) > argc) {
+                /* need at least one argument (change +1 to +2 for two, etc. as needeed) */
+
+                printf("optind = %d, argc=%d\n", optind, argc);
+                fprintf(stderr, "%s: missing name\n", argv[0]);
+                fprintf(stderr, usage.c_str(), argv[0]);
+                exit(1);
+        } else if (err) {
+                fprintf(stderr, usage.c_str(), argv[0]);
+                exit(1);
+        }
+        /* see what we have */
+        printf("lflag = %d\n", lflag);
+        printf("Iflag = %d\n", fflag);
+        printf("g_sLScope = \"%s\"\n", g_sLScope.at(1).c_str());
+        printf("g_sIScope = \"%s\"\n", g_sIScope.at(1).c_str());
+
+        if (optind < argc)        /* these are the arguments after the command-line options */
+                for (; optind < argc; optind++)
+                        printf("argument: \"%s\"\n", argv[optind]);
+        else {
+                printf("no arguments left to process\n");
+        }
+        exit(0);
+}
+
+int main(int argc, char **argv)
+{
+//    readFlags(argc, argv);
+    readFlags(argc,argv,0,1,1,0);
 }
