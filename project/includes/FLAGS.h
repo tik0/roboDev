@@ -4,15 +4,19 @@
 #include <vector>
 #include <getopt.h>
 
+class CFlags {
+
+public:
 std::vector<size_t> g_uiFreq; // Stores the periods
 std::vector<std::string> g_sLScope; // Stores the listener scopes
 std::vector<std::string> g_sIScope; // Stores the informer scopes
 std::vector<std::string> g_sRScope; // Stores the remoteprocedurecall scopes
 std::vector<std::string> g_sAScope; // Stores arbitrary strings defined by user
 
-//extern char * __progname; // Stores the programs name (Only UNIX)
+private:
 
-int getOpt(int argc,
+// Read the given arguments
+int getFlags(int argc,
               const char **argv,
               size_t p_uiNumPeriod_ms, // Amount of periods
               size_t p_uiNumList, // Amount of listener scopes
@@ -119,8 +123,9 @@ std::string helpString(size_t p_uiNumPeriod_ms, // Amount of periods
 	return usage;
 }
 
-// Read the flags but with user defined flags
-int readFlags(int argc,
+public:
+// Read the flags but with user defined help
+CFlags(int argc,
         const char **argv,
         size_t p_uiNumPeriod_ms, // Amount of periods
         size_t p_uiNumList, // Amount of listener scopes
@@ -130,10 +135,11 @@ int readFlags(int argc,
         std::vector<std::string> p_vString) // Stores the user defined strings
 {
 	std::string usage(helpString(p_uiNumPeriod_ms,p_uiNumList,p_uiNumInfo,p_uiNumRem,p_uiNumArb,p_vString));
-	return getOpt(argc,argv, p_uiNumPeriod_ms, p_uiNumList, p_uiNumInfo, p_uiNumRem, p_uiNumArb, usage);
+	this->getFlags(argc,argv, p_uiNumPeriod_ms, p_uiNumList, p_uiNumInfo, p_uiNumRem, p_uiNumArb, usage);
 }
 
-int readFlags(int argc,
+// Read the flags with user generic flags
+CFlags(int argc,
               const char **argv,
               size_t p_uiNumPeriod_ms, // Amount of periods
               size_t p_uiNumList, // Amount of listener scopes
@@ -141,24 +147,38 @@ int readFlags(int argc,
               size_t p_uiNumRem, // Amount of remoteprocedure scopes
               size_t p_uiNumArb) // Amount of arbitrary scopes
 {
-	    std::string usage(helpString(p_uiNumPeriod_ms,p_uiNumList,p_uiNumInfo,p_uiNumRem,p_uiNumArb));
-        return getOpt(argc,argv, p_uiNumPeriod_ms, p_uiNumList, p_uiNumInfo, p_uiNumRem, p_uiNumArb, usage);
+	std::string usage(helpString(p_uiNumPeriod_ms,p_uiNumList,p_uiNumInfo,p_uiNumRem,p_uiNumArb));
+	this->getFlags(argc,argv, p_uiNumPeriod_ms, p_uiNumList, p_uiNumInfo, p_uiNumRem, p_uiNumArb, usage);
 }
 
 
+};
+
+
+#define AMOUNT_PERIODS 0
+#define AMOUNT_LISTENER 1
+#define AMOUNT_INFORMER 2
+#define AMOUNT_REMOTEPROCEDURE 0
+#define AMOUNT_ARBITRARY 1
+
 // Example with user defined help
-//int main(int argc,const char **argv)
-//{
-//	std::vector<std::string> usersHelpString;
-//	usersHelpString.push_back("Listener Scope");
-//	usersHelpString.push_back("Informer Scope");
-//	usersHelpString.push_back("Some Arbitrary Stuff");
-//    readFlags(argc,argv,0,1,1,0,1,usersHelpString);
-//
-//}
+int main(int argc,const char **argv)
+{
+	// Defining a user help string
+	// It will be read consecutivly regarding Periods->Listener->Informer->Remote->Arbitrary
+	std::vector<std::string> usersHelpString;
+	usersHelpString.push_back("First Listener Scope");
+	usersHelpString.push_back("First Informer Scope");
+	usersHelpString.push_back("Second Informer Scope");
+	usersHelpString.push_back("First Arbitrary Stuff");
+	CFlags flags(argc,argv,AMOUNT_PERIODS,AMOUNT_LISTENER,AMOUNT_INFORMER,AMOUNT_REMOTEPROCEDURE,AMOUNT_ARBITRARY,usersHelpString);
+	std::cout << flags.g_sLScope.at(0) << std::endl;
+
+}
 
 // Example with generic help
 //int main(int argc,const char **argv)
 //{
-//    readFlags(argc,argv,0,1,1,0,0);
+//	CFlags flags(argc,argv,AMOUNT_PERIODS,AMOUNT_LISTENER,AMOUNT_INFORMER,AMOUNT_REMOTEPROCEDURE,AMOUNT_ARBITRARY);
+//	std::cout << flags.g_sLScope.at(0) << std::endl;
 //}
