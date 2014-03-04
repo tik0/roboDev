@@ -12,20 +12,40 @@
 #define WARNING_MSG_
 #define ERROR_MSG_
 #include <MSG.h>
-
 #include <FLAGS.h>
 
 #include "infraRed.h"
 #include <bebot.h>
 #include <iostream>
+#include <boost/thread.hpp>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+#include <getopt.h>
+#include <vector>
 
 using namespace std;
 
 int main (int argc, const char **argv){
 
-	INFO_MSG("Start sending ir information in ")
+	// Listener scopes
+	extern std::vector<std::string> g_sLScope;
+	// Informer scopes
+	extern std::vector<std::string> g_sIScope;
+	// Remote Procedure scopes
+	extern std::vector<std::string> g_sRScope;
+	// Frequencies
+	extern std::vector<int> g_uiFreq;
 
-//	std::cout << "[sense IR] Start sending ir information in '/sense/ir'" << std::endl;
+
+	// Get one informer scope
+	readFlags(argc,argv,1,0,1,0);
+
+	// Calculate the period
+	int fPeriod = (int)(1 / ( g_uiFreq.at(0) )) / 1000;
+
+	INFO_MSG( "Start sending IR information in " << g_sIScope.at(0) )
 
 	//Start up with initializing the robot
 	struct bebot BEBOT;
@@ -34,11 +54,11 @@ int main (int argc, const char **argv){
 
 	SensorInformer::InfraRed myIR(&BEBOT);
 
-	// This loop needs to be parameterized regarding the update-frequency
+
 	for(;;) {
 //		myIR.sendIRData();
 		ERROR_MSG("This is some variable")
-		sleep(1);
+		boost::this_thread::sleep( boost::posix_time::milliseconds(fPeriod) );
 	}
 
 	return EXIT_SUCCESS;
