@@ -52,6 +52,7 @@ target_link_libraries (
     boost_date_time-mt
     boost_program_options-mt
     boost_system-mt
+    boost_thread
     rsc
 )
 
