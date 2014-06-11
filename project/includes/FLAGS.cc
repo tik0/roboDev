@@ -7,7 +7,7 @@
 class CFlags {
 
 public:
-std::vector<size_t> g_uiPeriod; // Stores the periods
+std::vector<size_t> g_uiFreq; // Stores the periods
 std::vector<std::string> g_sLScope; // Stores the listener scopes
 std::vector<std::string> g_sIScope; // Stores the informer scopes
 std::vector<std::string> g_sRScope; // Stores the remoteprocedurecall scopes
@@ -38,7 +38,7 @@ int getFlags(int argc,
                 switch (flag) {
                 case 'f':
                         fFlag++;
-                        g_uiPeriod.push_back(atoi(optarg));
+                        g_uiFreq.push_back(atoi(optarg));
                         break;
                 case 'l':
                         lFlag++;
@@ -85,7 +85,7 @@ std::string helpString(size_t p_uiNumPeriod_ms, // Amount of periods
               size_t p_uiNumArb) // Amount of arbitrary scopes
 {
 	std::string usage("usage: %s  ");
-	for ( size_t idx = 0; idx < p_uiNumPeriod_ms; idx++)  usage.append("-p period ");
+	for ( size_t idx = 0; idx < p_uiNumPeriod_ms; idx++)  usage.append("-f frequency ");
 	for ( size_t idx = 0; idx < p_uiNumList; idx++)  usage.append("-l listenerscope ");
 	for ( size_t idx = 0; idx < p_uiNumInfo; idx++)  usage.append("-i informerscope ");
 	for ( size_t idx = 0; idx < p_uiNumRem; idx++)   usage.append("-r remoteprocedurescope ");
@@ -113,7 +113,7 @@ std::string helpString(size_t p_uiNumPeriod_ms, // Amount of periods
 
 	size_t stringIdx = 0;
 	std::string usage("usage: %s ");
-	for ( size_t idx = p_uiNumPeriod_ms; idx > 0; idx--)  usage.append(" -p " + p_vString.at(stringIdx++));
+	for ( size_t idx = p_uiNumPeriod_ms; idx > 0; idx--)  usage.append(" -f " + p_vString.at(stringIdx++));
 	for ( size_t idx = p_uiNumList; idx > 0; idx--)  usage.append(" -l " + p_vString.at(stringIdx++));
 	for ( size_t idx = p_uiNumInfo; idx > 0; idx--)  usage.append(" -i " + p_vString.at(stringIdx++));
 	for ( size_t idx = p_uiNumRem; idx > 0; idx--)   usage.append(" -r " + p_vString.at(stringIdx++));
@@ -154,31 +154,32 @@ CFlags(int argc,
 
 };
 
-//cp -f FLAGS.h FLAGS.cc && g++ FLAGS.cc -o flags && ./flags -l asd -i kdw -i hsajkdf -a hausdhua
-//#define AMOUNT_PERIODS 0
-//#define AMOUNT_LISTENER 1
-//#define AMOUNT_INFORMER 2
-//#define AMOUNT_REMOTEPROCEDURE 0
-//#define AMOUNT_ARBITRARY 1
-//
-//// Example with user defined help
-//int main(int argc,const char **argv)
-//{
-//	// Defining a user help string
-//	// It will be read consecutivly regarding Periods->Listener->Informer->Remote->Arbitrary
-//	std::vector<std::string> usersHelpString;
-//	usersHelpString.push_back("First Listener Scope");
-//	usersHelpString.push_back("First Informer Scope");
-//	usersHelpString.push_back("Second Informer Scope");
-//	usersHelpString.push_back("First Arbitrary Stuff");
-//	CFlags flags(argc,argv,AMOUNT_PERIODS,AMOUNT_LISTENER,AMOUNT_INFORMER,AMOUNT_REMOTEPROCEDURE,AMOUNT_ARBITRARY,usersHelpString);
-//	std::cout << flags.g_sLScope.at(0) << std::endl;
-//	std::cout << flags.g_sIScope.at(0) << std::endl;
-//	std::cout << flags.g_sIScope.at(1) << std::endl;
-//	std::cout << flags.g_sAScope.at(0) << std::endl;
-//
-//
-//}
+
+#define AMOUNT_PERIODS 0
+#define AMOUNT_LISTENER 1
+#define AMOUNT_INFORMER 2
+#define AMOUNT_REMOTEPROCEDURE 0
+#define AMOUNT_ARBITRARY 1
+
+// Example with user defined help
+int main(int argc,const char **argv)
+{
+	// Defining a user help string
+	// It will be read consecutivly regarding Periods->Listener->Informer->Remote->Arbitrary
+	std::vector<std::string> usersHelpString;
+	usersHelpString.push_back("First Listener Scope");
+	usersHelpString.push_back("First Informer Scope");
+	usersHelpString.push_back("Second Informer Scope");
+	usersHelpString.push_back("First Arbitrary Stuff");
+	CFlags flags(argc,argv,AMOUNT_PERIODS,AMOUNT_LISTENER,AMOUNT_INFORMER,AMOUNT_REMOTEPROCEDURE,AMOUNT_ARBITRARY,usersHelpString);
+	std::cout << flags.g_sLScope.at(0) << std::endl;
+	std::cout << flags.g_sIScope.at(0) << std::endl;
+	std::cout << flags.g_sIScope.at(1) << std::endl;
+	std::cout << flags.g_sAScope.at(0) << std::endl;
+
+
+
+}
 
 // Example with generic help
 //int main(int argc,const char **argv)

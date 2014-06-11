@@ -14,23 +14,20 @@
 #include <MSG.h>
 
 #include <FLAGS.h>
-#define AMOUNT_PERIODS 0
-#define AMOUNT_LISTENER 1
-#define AMOUNT_INFORMER 2
-#define AMOUNT_REMOTEPROCEDURE 0
-#define AMOUNT_ARBITRARY 1
 
 #include "infraRed.h"
 #include <bebot.h>
 #include <iostream>
+#include <boost/thread/thread.hpp>
 
 using namespace std;
 
 int main (int argc, const char **argv){
 
-	CFlags flags(argc,argv,AMOUNT_PERIODS,AMOUNT_LISTENER,AMOUNT_INFORMER,AMOUNT_REMOTEPROCEDURE,AMOUNT_ARBITRARY);
-	//	std::cout << flags.g_sLScope.at(0) << std::endl;
-//	INFO_MSG("Start sending ir information in " << flags.g_sIScope.at(0))
+	readFlags(argc,argv,1,0,1,0);
+
+	INFO_MSG("Start sending ir information in " << g_sIScope.at(0) << " at " << g_uiFreq.at(0) << " Hz")
+
 
 //	std::cout << "[sense IR] Start sending ir information in '/sense/ir'" << std::endl;
 
@@ -45,7 +42,7 @@ int main (int argc, const char **argv){
 	for(;;) {
 //		myIR.sendIRData();
 		ERROR_MSG("This is some variable")
-		sleep(1);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 	}
 
 	return EXIT_SUCCESS;
